@@ -18,3 +18,17 @@ print("Key:", key.hex())
 print("Nonce:", nonce.hex())
 print("Encrypted:", encrypted.hex())
 print("Decrypted:", decrypted.decode())
+
+# for tamering
+
+from cryptography.exceptions import InvalidTag
+
+modified = bytearray(encrypted)
+modified[0] ^= 1
+
+try:
+    aes.decrypt(nonce, bytes(modified), None)
+    print("Accepted")
+
+except InvalidTag:
+    print("Tampering detected!")
